@@ -1,0 +1,20 @@
+# behind you, the hall is not how you left it
+setblock 40 54 16 minecraft:redstone_lamp[lit=false]
+setblock 48 54 17 minecraft:redstone_lamp[lit=false]
+setblock 34 51 16 minecraft:spruce_stairs[facing=west]
+setblock 23 52 10 minecraft:air
+setblock 23 51 10 minecraft:air
+setblock 23 51 10 minecraft:spruce_door[facing=west,hinge=left,open=true,half=lower]
+setblock 23 52 10 minecraft:spruce_door[facing=west,hinge=left,open=true,half=upper]
+setblock 23 52 3 minecraft:air
+setblock 23 51 3 minecraft:air
+setblock 23 51 3 minecraft:spruce_door[facing=west,hinge=right,open=true,half=lower]
+setblock 23 52 3 minecraft:spruce_door[facing=west,hinge=right,open=true,half=upper]
+setblock 26 52 10 minecraft:air
+setblock 26 51 10 minecraft:air
+setblock 26 51 10 minecraft:spruce_door[facing=east,hinge=right,open=true,half=lower]
+setblock 26 52 10 minecraft:spruce_door[facing=east,hinge=right,open=true,half=upper]
+setblock 26 52 3 minecraft:air
+setblock 26 51 3 minecraft:air
+setblock 26 51 3 minecraft:spruce_door[facing=east,hinge=left,open=true,half=lower]
+setblock 26 52 3 minecraft:spruce_door[facing=east,hinge=left,open=true,half=upper]

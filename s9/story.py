@@ -196,7 +196,12 @@ def act0():
     fn("surface/kit",
        "scoreboard players set #kit s9 1",
        "scoreboard players set #light s9 0",
-       lines("story/kit", ["a0_kit", "a0_to_lift"], gap=20, start=10,
+       call("surface/kit_lines"))
+    fn("surface/kit_lines",
+       "# wait for the opening briefing to finish",
+       f"execute unless score #s_intro s9 matches 1 run return run {sched('surface/kit_lines', 20)}",
+       f"execute if score #talk s9 matches 1.. run return run {sched('surface/kit_lines', 20)}",
+       lines("story/kit", ["a0_kit", "a0_to_lift"], gap=20, start=5,
              then=objective("Call the lift", "Lift house, north-west, under the headframe")))
 
     fn("surface/call",

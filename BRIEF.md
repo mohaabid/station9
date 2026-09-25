@@ -1,181 +1,134 @@
-# STATION 9 — Handoff brief for the next Claude
+# STATION 9: handoff brief
 
-You're picking up a Minecraft horror map that another Claude session built and tested. The player has played it once, and you'll expand it into something actually scary. This file has everything: what exists, how it works, what the player said, the traps we already hit, and how to test and deliver.
+Read this before changing anything. It covers what the map is, how it's built, how it's
+tested, and what nobody has been able to check yet.
 
-**Read this whole file before changing anything.**
+## 1. History
 
----
+- **Version 1** (a previous session): a ~10 minute map on one level. The player's verdict:
+  *"good honestly but it could expand it was not that scary, no introduction, boring, could hear
+  ticking which pissed me off"*. The ticking was heard **throughout the whole game**.
+- **Version 2** (this one): rebuilt around that feedback, following the plan the player approved:
+  a walkable introduction, a second level, a flashlight, a creature that roams, lockers, a longer
+  escape, two endings, voice acting and custom sounds. Target length 20–30 minutes.
 
-## 1. The player's verdict (verbatim)
+### The ticking
 
-> "good honestly but it could expand it was not that scary, no introduction, boring, could hear ticking which pissed me off"
+Two things played on a near-constant beat through most of v1:
 
-What that means in practice:
+- **Lit candles.** The game makes lit candles crackle at random, and v1 had ~14 of them along the
+  main corridor and in the office. All candles are now unlit.
+- **The flickering corridor lamp** played `block.redstone_torch.burnout` every ~1.3 s.
 
-| Complaint | What to do |
-|---|---|
-| **Not that scary** | The scares are one-shot glimpses, and a figure that stands still and vanishes loses its effect by the second time. The player needs to feel **hunted** well before the finale, and needs **uncertainty**: the same trick shouldn't work the same way twice. |
-| **No introduction** | The current intro is about 20 seconds in a dark lift with a title card and a couple of radio lines, under a Blindness effect. It didn't register as an introduction. Build a real opening: who you are, why you're here, what went wrong, and a moment of normality before things turn. |
-| **Boring** | About 10 minutes, one objective chain (card → fuse → lever), mostly walking between rooms. There's not enough to do, the spaces are small, and nothing changes as you go. |
-| **Ticking that annoyed him** | See section 6. Find the source and remove it. **Ask the player which moment it was** if you can. |
-
-The player agreed to the brief below. Confirm the expansion plan (section 7) with them before you build.
-
----
+Also removed: the alarm beeps, the steady chase heartbeat, the radio clicks, the sculk sensor and
+shrieker, and the lift clanks. The resource pack also mutes the vanilla candle, sculk and burnout
+sounds. **Rule: nothing repeats on a fixed short interval.** Ambience is long stereo beds;
+creature footsteps use a random stride.
 
 ## 2. Player environment
 
-- **Minecraft Java 1.20.4** through **Lunar Client** on macOS (Apple Silicon). Stay on 1.20.4. 1.21+ renames datapack folders (`functions/` becomes `function/`) and changes item NBT to components, so this pack would break there.
-- Saves folder: `~/Library/Application Support/minecraft/saves/` (the world "Station 9" is installed there).
-- Singleplayer, cheats on in the delivered world.
-- Vanilla only. No mods. A **resource pack is allowed and encouraged** (1.20.4 resource `pack_format` = **22**). Ship it inside the world as `resources.zip`, which singleplayer loads automatically.
+- Minecraft Java **1.20.4** via **Lunar Client**, macOS. Stay on 1.20.4: 1.21 renames datapack
+  folders and replaces item NBT with components.
+- Singleplayer, cheats on in the delivered world (for the restart link).
+- Resource pack format **22**, shipped as the world's `resources.zip`.
 
----
+## 3. The story
 
-## 3. What's in this folder
-
-| Path | What |
-|---|---|
-| `generate.py` | **The source of truth.** One Python 3 script (stdlib only) that writes the whole datapack: layout, build, lights, scares, chase, ending. Run `python3 generate.py` and it writes `Station9/`. |
-| `Station9/` | Generated datapack (1.20.4, `pack_format` 26). Don't edit it by hand; regenerate instead. |
-| `package_world.py` | Turns a server-built world into a singleplayer save: renames the level, sets `allowCommands`, adds the icon. It includes a tiny NBT reader/writer. |
-| `Station 9.zip` | The current playable world (void world, pre-built, pack installed). |
-| `README.md` | Player-facing how-to-play and tuning notes. |
-| `BRIEF.md` | This file. |
-
----
-
-## 4. How the current map works
-
-### Story
-You're sent down to Level B9 of an underground research station that went dark 41 days ago. Radio contact is "Ops". The lift crashes on arrival. You need Generator B running.
-
-Lore (from lectern books): Subject 9 is a 2.4 m entity. It only moves in the dark ("it can't SEE in the dark"). Power dips dropped the cell field. Staff member Marsh vanished, and his keycard appeared on Dr. Hale's desk. "The mirrors stopped showing us. Only it." Restoring main power turns every light on at once, and then **it can see you**. That's the twist that triggers the chase.
-
-### Layout (floor y=40, rooms 3 tall at y41–43, ceiling y=44, all carved out of a solid deepslate block)
-```
- z
- 0   [alcove]            <- fake "reflected office" behind the mirror
- 3   [reflection]        <- mirror-image washroom behind the glass
- 6   ====mirror====
- 7   [washroom]
-11   [ OFFICE 9-A  x10-20 ]
-18 [LIFT]=[======= CORRIDOR  x7-48 ========]=[ GENERATOR B x50-60, z15-25 ]
-     x2-5          [CONTAINMENT x26-36]           |
-22                 [   cell x29-33   ]            | tunnel1 x58-59
-31                         |tunnel3               |
-34                 [======= tunnel2  x35-59 ======]
-```
-Openings are listed in `OPENINGS`, and lamps in `LAMPS`.
-
-### Flow (`#stage s9`)
-| Stage | Meaning | Key triggers |
+| Stage | Where | What happens |
 |---|---|---|
-| 0 | Not started | `join` schedules `start` 40 ticks after first join |
-| 1 | Lift intro | `intro/0` → `intro/ride` (B1–B8, 30 ticks each) → `intro/crash` → `intro/3` opens the shutter |
-| 2 | Explore, no card | Corridor footsteps echo (`tick/footsteps`); keypad denies with a hint; generator room hints "no fuse" |
-| 3 | Has keycard | `event/got_key`: a stalker appears at the west end of the corridor and vanishes after you look at it; office door slams shut and candles go out |
-| 4 | Containment opened | `event/k_scare_*`: lights flicker, the figure appears in the cell, then blackout and an elder guardian curse sound |
-| 5 | Has fuse | — |
-| 6 | Chase | `gen/1` all lights on → `gen/2` lockdown and alarm → `gen/3*` three bangs on the door → `gen/3c` blackout, red emergency lights (lit `deepslate_redstone_ore`), tunnels open, checkpoint set → `gen/4` Subject 9 (wither skeleton, speed 0.34, 100 damage, invulnerable) bursts in |
-| 7 | Ending | `end/1` shutter closes → knocks → ride up B9–B1 → "ESCAPED" → lamp dies, sniff → jumpscare (camera forced to face it, roar) → "THE END" → time and deaths shown, "Play again" link |
+| 1 | Surface | Opening shots of the site in a storm, title card |
+| 2 | Surface | Walk from the truck to the security hut; sign in; take the kit (flashlight + battery); call the lift |
+| 3 | Lift | Ride down with Reyes briefing; something lands on the cage roof and walks across it; the cable snaps at B8 |
+| 4 | B8 | Door release; comms relay restores the radio; find the stairwell code (**0214**: Okafor's note says "the time of the first dip", Hale's tape in the lab says "oh two fourteen", Reyes hints at 4 and 8 min); phone call from "Reyes" who isn't; figure behind the lab glass; the hall changes behind you; lights die on the way down |
+| 5 | B9 | First sighting teaches the rule: it creeps closer each time the lamp flickers. Then it roams |
+| 6 | B9 | Marsh's keycard in office 9-A (door slams). Mirror scare opens the room behind the mirror: Marsh's body and tape |
+| 7 | B9 | Keycard opens containment. It is standing in its cell; the fuse is at its feet |
+| 8 | B9 | Fuse taken: blackout, it moves to the generator room and waits |
+| 9 | Escape | Lever: every light comes on, lockdown, bangs, blackout, red emergency lights, flashlight burns out, RUN. Tunnel 1, service stairs to B8, service corridor, hall collapses (detour through the cafeteria), lobby, lift. Tunnel 2 is a dead end with a locker |
+| 10 | Lift | Ride up. It lands on the roof at ~B4. **Cage light on:** "your cage weight reads wrong", jump scare at the top (**Ending 1, Passenger**). **Cage light off** (Marsh's tape tells you): it can't find you; you walk out into the rain (**Ending 2, Lights Out**) |
 
-The mirror scare works at any stage from 2 on. Look north into the washroom mirror and the figure stands in the reflected doorway behind you. Turn around and the mirror shatters.
+Stats at the end: time, deaths, tapes found (of 3), ending.
 
-### Systems
-- **Lights**: redstone lamps set directly in the ceiling with `setblock ...[lit=true/false]`. There's no redstone behind them; with `randomTickSpeed 0` they keep their state. `build/lamps_backup` (dim start), `lamps_all_on`, `lamps_all_off`. C2 flickers randomly.
-- **Emergency lights**: 46 `deepslate_redstone_ore` blocks in the walls at y43. They look like red-flecked stone until the chase, then they're set to `lit=true` (red glow, light level 9).
-- **Chase leash**: every 10 ticks a marker is dropped at the player. If Subject 9 is more than 16 blocks away, it teleports to the marker from 3 seconds ago, so it never gets lost but a sprinting player can stay ahead.
-- **Death**: `deathCount` objective. Immediate respawn at the generator checkpoint, and Subject 9 comes back after 100 ticks.
-- **Effects**: camera shake (`fx/shake`, rotation jitter through tp), alarm, radio (tellraw plus a click sound).
-- `start` = `reset` (clear every scheduled function, kill `@e[tag=s9]`, rebuild everything, reset scores, respawn keycard and fuse) + `intro/0`.
+## 4. How it's built
 
----
+`python3 generate.py` (stdlib only) writes `Station9/` (datapack, pack_format 26) and
+`build/resources.zip` (resource pack). It checks that every called function, sound and predicate
+exists and rejects malformed selectors.
 
-## 5. Lessons already learned (don't repeat these)
+| File | Contents |
+|---|---|
+| `s9/world.py` | **All coordinates**: surface, B8 (floor 50), B9 (floor 40), rooms, openings, doors, lockers, lamps, the creature's waypoint graph and door states |
+| `s9/build.py` | Everything that places blocks, split into steps run one per tick on restart |
+| `s9/systems.py` | Startup, the tick loop, voices, sidebar objectives, flashlight, batteries, lockers, noise, death, ambience |
+| `s9/ai.py` | Subject 9 (below) |
+| `s9/story.py` | The acts, scares, chase and endings |
+| `s9/script.py` | Every spoken line (shared with the audio tool) |
+| `s9/respack.py` | sounds.json, the creature skin, locker doors, item icons (all painted in code) |
+| `s9/debug.py` | `debug/b9`, `debug/roam`, `debug/chase`: jump into the story for testing |
+| `tools/make_audio.py` | Voices (Piper TTS, offline, models from Hugging Face) + synthesized effects -> `assets/sounds/` with a duration manifest used for timing |
 
-1. **Selector volumes (`dx/dy/dz`) match any hitbox that *touches* `[x, x+dx+1]`.** The first version triggered the ending while the player stood in the lift doorway. The shutter slammed shut on him, he died, and he "escaped" anyway. `box_selector()` now insets by the player's half-width (0.3), so triggers use the player's feet position. Anything that closes a door must also rescue a player standing in the doorway (see `DOORWAY_BOX` in `end/1`).
-2. **1.20.4 specifics**: `data/<ns>/functions/` (plural), `tags/functions/load|tick.json`, item NBT `{id, Count, tag:{...}}`, sign NBT `front_text:{messages:[...]}`, attribute names `minecraft:generic.*`. `random value 1..N` and `return` exist.
-3. **Scheduled functions run as the server at world spawn**, so use `@a` and absolute coordinates in them, never `@s`.
-4. A function with **one bad command fails to load entirely**, silently in game. Always check the server log for `Failed to load function`.
-5. `fill` is capped at 32,768 blocks. `fill()` in the generator splits automatically.
-6. Chunks must be loaded before a build. The pack calls `forceload add -16 -16 79 47` on load, and `join` waits 40 ticks before starting.
-7. **Wither skeletons are 2.4 blocks tall**, so every path Subject 9 uses must be 3 blocks tall, doorways included.
-8. Glass panes and iron bars placed by commands need explicit `east=true,west=true` states, or they render as posts.
-9. Doors: set the lower half, then the upper. Re-setting the lower half copies its state to the upper.
-10. A sculk shrieker only gives Darkness if `doWardenSpawning` is true, and then it can spawn a real Warden. We keep it false, so the shrieker is sound only.
-11. A `fill` that changes nothing reports 0. Don't use it to count blocks in tests; check specific blocks with `execute if block`.
+### Subject 9
 
----
+A NoAI wither skeleton (reskinned) moved by teleport along a waypoint graph. Routes are
+precomputed in Python for each door state (`world.TABLES`) and stored as next-hop tables in
+command storage. It can't get stuck or lost.
 
-## 6. The ticking: likely sources
+- **Frozen** while the player is looking at it (field of view + line of sight raycast) *and* it's
+  lit (light level ≥ 6 at its body, or in the flashlight beam).
+- **Sees** the player (hunts) when it has line of sight and the player's flashlight is on or
+  they're standing in bright light (≥ 9).
+- **Hears** sprinting within 20 blocks, walking within 6. Sneaking is silent.
+- **Lockers:** if it saw you within the last 2 s when you closed the door, it walks up and waits
+  ~6 s. Opening the door within 4 blocks of it = caught. Otherwise it searches your last spot.
+- **Chase:** follows your node at 0.23 blocks/tick (sprint is 0.28), 0.30 when more than 20
+  blocks behind, 0.055 while watched and lit.
+- **Catch:** camera forced to face it, scream, then death and respawn at the checkpoint with it
+  moved far away.
 
-The player said "could hear ticking which pissed me off". These are the candidates, most likely first:
+## 5. Lessons (don't repeat these)
 
-1. **`fx/alarm`**: `block.note_block.bit` every 8 ticks for about 7 seconds during lockdown. That's a very tick-like beep.
-2. **The sculk sensor in containment** at `(27,41,28)`. Its tendrils make a clicking sound every time the player moves nearby, and it can go on for a long time.
-3. **`chase/pulse`**: `entity.warden.heartbeat` every 10 ticks while Subject 9 is within 12 blocks, plus `entity.warden.step` every 10 ticks. It's a steady metronome.
-4. **Radio messages**: each one plays `ui.button.click` plus `note_block.bit`.
-5. **Footstep echo** in the corridor: `block.deepslate_tiles.step` every 10 walked ticks.
-6. **Lift ride**: `block.chain.step` plus `minecart.riding` every 30 ticks.
+1. **Volume selectors** match hitboxes touching `[x, x+dx+1]`. `box_selector()` insets by the
+   player half-width. It needs boxes at least 2 wide; use `in_box()` (a predicate) for single cells.
+2. **A selector with only `y=`/`dy=`** is a 1-block column at the executor's x/z. The generator
+   now rejects partial volume selectors.
+3. **Whole-number coordinates are centred** by `tp`/`summon` (48 → 48.5). `fmt()` keeps floats
+   as `48.0`.
+4. **Changing an existing door with setblock fails**: each half copies the other. `door()` clears
+   the door first, then places lower, then upper.
+5. Function names must be lowercase. `#minecraft:air` is not a block tag in 1.20.4.
+6. `fillbiome` is capped at 32,768 blocks; the surface biome fill is split.
+7. Long OGG writes crash libsndfile's Vorbis encoder; `make_audio.py` writes in blocks.
+8. Scheduled functions run as the server at world spawn: use `@a` and absolute coordinates.
+9. **The test server runs a copy of the datapack.** After `generate.py`, run
+   `python3 tests/server.py deploy` or you'll test stale code.
+10. Stereo sounds play at full volume wherever the player walks (voices, ambience); mono sounds
+    are positional (footsteps, doors).
 
-Default fix if the player can't say which: remove the sculk sensor, replace the alarm with a slow siren-like layered sound (or a custom one from the resource pack), make the heartbeat irregular and distance-based instead of a fixed 10-tick pulse, and drop the click from radio messages. **Nothing should repeat on a fixed short interval.**
+## 6. How to test
 
----
+```
+python3 tests/server.py setup && python3 tests/server.py start   # 1.20.4 void server + RCON
+python3 generate.py && python3 tests/server.py deploy             # after every change
+python3 tests/play.py act0 act1 act2 act3                          # the whole map with a bot player
+python3 tests/make_world.py                                        # the deliverable world + zip
+```
 
-## 7. Proposed expansion (confirm with the player first)
+The server jar (sha1 `8dd1a28015f51b1803213892b50b7b4fc76e594d`) lives in `~/.station9-server`.
+The bot is mineflayer (`tests/bot/`, `npm install` there). The player accepted the EULA.
 
-Target length is **25–35 minutes**, with a clear rise in tension across three acts.
+**Verified on a real 1.20.4 server:** zero load errors; the full story from first join to both
+endings; every voice line in order; the creature's freeze, sight, hearing, hunting, lunge,
+locker check, catch and respawn; the chase route including the collapse detour; flashlight
+beam and battery swaps; the packaged world auto-starting on first join. Voice lines were checked
+for intelligibility with a speech recognizer (Whisper).
 
-### Act 0: a real introduction (on the surface, in daylight or storm)
-- Open outside: a rainy night at a fenced surface facility (a small built area at the top of the shaft). Put Blindness only on the very first fade-in. The player should *see* where they are.
-- A cutscene camera: put the player in spectator on a moving armor stand with `spectate`, or use tp steps. Title card, then Ops briefing on the radio with names, the mission, and the fact that the last team never came back.
-- A walkable security hut with a sign-in sheet (the last entries are 41 days old), a bulletin board and a locker with your gear. This is a moment of normality before anything goes wrong.
-- The lift ride down, where something *is on the roof of the lift* (footsteps and a scrape above you). Then the crash.
+**Not verifiable without a person playing:** how scary it is, how hard the chase and the
+roaming are, audio balance, the opening camera shots, how the textures look in game, and
+whether Lunar Client applies the world resource pack automatically.
 
-### Act 1: dread (explore, no direct threat)
-- More space: two floors (B8 and B9, linked by stairs), and dorms, a cafeteria, a lab and a server room. Each room should have one memorable image.
-- **A flashlight with a battery.** Hold a named item; while it's held, a `light` block follows a marker 3 blocks ahead of the player's eyes (raycast every tick), and the battery drains. Batteries are pickups. This is the biggest single improvement to dread, because darkness becomes a resource.
-- A varied scare catalogue with no repeats: doors that open by themselves, a phone that rings, a radio voice that isn't Ops, a corridor that's different when you turn back (swap the geometry while it's out of view), objects moved between visits, a figure visible through a window that's gone when you enter.
+## 7. Where to go next
 
-### Act 2: hunted (Subject 9 roams)
-- **"Only moves in the dark / when not seen"** mechanic (it's in the lore, so use it). Subject 9 roams between waypoints but freezes while the player looks at it *and* it's lit (flashlight counts). Look detection is a dot product or raycast from the eyes. When you look away or the light flickers, it moves closer. This is Weeping-Angel horror and it matches the story.
-- **Hiding spots**: lockers (the player is tp'd inside, the view is restricted, breathing sounds). Subject 9 checks some of them.
-- Sound as information: its footsteps are directional and irregular, so the player learns to listen.
-
-### Act 3: escape
-- Keep the generator twist ("the lights let it see you") but make the chase longer and **readable**: the red emergency route, a collapsing section, one wrong path that's a dead end with a locker to hide in.
-- The ending has two outcomes depending on whether the player read all the logs or found Marsh. A secret ending is optional.
-
-### Resource pack (strongly recommended)
-- Custom sounds (`.ogg`): real ambience beds, a proper alarm, radio static, voice-like whispers, its footsteps.
-- Fog and darker lighting through core shaders are fragile, so be careful; at minimum use a custom lightmap and texture tweaks.
-- A retexture for Subject 9 (the wither skeleton texture) so it's a unique creature, not a recognisable mob.
-
----
-
-## 8. How to test (required, and it's how the first version's bugs were caught)
-
-1. Download the **official 1.20.4 server jar** from Mojang (`piston-meta.mojang.com/mc/game/version_manifest_v2.json` → 1.20.4 → `downloads.server`). The expected SHA-1 is `8dd1a28015f51b1803213892b50b7b4fc76e594d`. It needs Java 17+. Running it means accepting the Minecraft EULA (`eula=true`). **Confirm that with the player before you do it.**
-2. `server.properties`: `level-type=minecraft\:flat`, void `generator-settings` (`{"layers":[{"block":"minecraft:air","height":1}],"biome":"minecraft:the_void","features":false}`), `enable-rcon=true`, `online-mode=false`, `gamemode=adventure`, `difficulty=normal`.
-3. Put `Station9/` in `world/datapacks/`, start the server, and **grep the log for `Failed to load function`**. That must be zero.
-4. Drive it over RCON: run `function station9:reset`, then `execute if block ...` and `execute if entity ...` checks after each event function, and simulate buttons and levers by `setblock`-ing them powered. A small Python RCON client is about 15 lines.
-5. For hitbox and selector checks, summon a 0.6-wide mob (a zombie with NoAI) at test positions.
-6. **You can't test player feel on a server with no player.** Tell the player plainly what you couldn't verify (chase difficulty, look detection, audio balance).
-
-## 9. How to deliver
-
-1. Reset to stage 0 (`function station9:reset`), `save-all flush`, `stop`.
-2. `python3 package_world.py <server>/world "<out>/Station 9"`.
-3. Zip it and give the player the zip. They unzip it into `~/Library/Application Support/minecraft/saves/`, then play on **1.20.4**.
-4. Keep `generate.py` as the single source of truth, and update `README.md` and this brief.
-
-## 10. Acceptance checklist
-- [ ] Zero `Failed to load function` lines
-- [ ] Nothing ticks or beeps on a fixed short loop
-- [ ] A real introduction the player can walk around in
-- [ ] 25–35 minutes, with at least one threat that roams before the finale
-- [ ] No door or shutter can close on the player
-- [ ] Every scare is different, and none repeats identically
-- [ ] Restart (`/function station9:start`) fully resets everything
-- [ ] Delivered as a ready-to-play 1.20.4 world zip
+- Ask the player how the chase and the roaming felt, and tune `ai.SPEED` / `HEADSTART`.
+- If the resource pack doesn't load in Lunar, the map still works but loses its sounds: check
+  first.
+- Ideas not built: a secret ending, more rooms on B8, a custom lightmap.

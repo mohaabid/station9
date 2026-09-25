@@ -251,4 +251,5 @@ schedule clear station9:story/up/11
 schedule clear station9:story/up/12
 schedule clear station9:story/up/13
 schedule clear station9:story/up/14
+schedule clear station9:surface/kit_lines
 schedule clear station9:surface/signed

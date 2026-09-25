@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 Turn a server-built world folder into a singleplayer save:
-renames the level, turns cheats on (for the restart button) and adds the icon.
+renames the level, turns cheats on (for the restart button), adds the icon and the
+resource pack (build/resources.zip, as the world's resources.zip), and leaves out the
+test server's player data.
 
     python3 package_world.py <server world dir> <output save dir>
 """
@@ -87,7 +89,11 @@ def save(path, name, root):
 def main(src, dst):
     if os.path.exists(dst):
         sys.exit(f"{dst} already exists - not overwriting it")
-    shutil.copytree(src, dst, ignore=shutil.ignore_patterns("session.lock", "level.dat_old"))
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns("session.lock", "level.dat_old", "playerdata", "stats",
+                                                            "advancements"))
+    res = os.path.join(HERE, "build", "resources.zip")
+    if os.path.exists(res):
+        shutil.copy(res, os.path.join(dst, "resources.zip"))   # singleplayer loads this automatically
     name, root = load(os.path.join(dst, "level.dat"))
     data = root["Data"][1]
     data["LevelName"] = (STRING, "Station 9")

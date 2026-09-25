@@ -204,6 +204,53 @@ def caught():
     show_log()
 
 
+def act2():
+    """B9 with the creature switched off (its behaviour has its own tests): all the story beats."""
+    step("B9 story beats (creature paused)")
+    time.sleep(3)
+    r.cmd("function station9:b9/teach_3")
+    r.cmd("scoreboard players set #hgrace s9 999999")
+    b.route(points=[[15.5, 20], [15.5, 19.3]]); b.use_block(x=15, y=41, z=18); time.sleep(0.4)
+    b.route(points=[[15.5, 17.6], [15.5, 15], [18.5, 13.0], [18.5, 12.2]]); time.sleep(3)
+    print("   stage after keycard", score("stage"))
+    b.route(points=[[15.5, 15], [15.5, 17.6]])
+    if "passed" in r.cmd("execute if block 15 41 18 minecraft:dark_oak_door[open=false]"):
+        b.use_block(x=15, y=41, z=18); time.sleep(0.4)
+    b.route(points=[[15.5, 19.5], [15.5, 20], [28.5, 20]]); b.use_block(x=28, y=42, z=20); time.sleep(1)
+    print("   stage after keypad", score("stage"))
+    b.route(points=[[31, 20], [31, 22], [31, 23.5]]); time.sleep(1)
+    h = hpos(); b.lookat(x=h[0], y=43, z=h[2])
+    b.hold(name="carrot_on_a_stick")
+    if score("light") == 0:
+        b.use_item()
+    time.sleep(1)
+    b.route(points=[[31.5, 25.2], [31.5, 26.8]]); time.sleep(1.5)
+    print("   stage after fuse", score("stage"))
+    b.route(points=[[31.5, 25.2], [31, 23], [31, 21], [31, 20], [48, 20], [52, 20]])
+    b.use_block(x=53, y=42, z=20); time.sleep(1)
+    print("   stage after lever", score("stage"))
+    show_log()
+
+
+def act3():
+    step("the escape")
+    t0 = time.time()
+    while score("hmode") != 5 and time.time() - t0 < 40:
+        time.sleep(0.25)
+    b.route(points=[[56.5, 23.5], [59.0, 24.5], [59.0, 26.5], [59.0, 35.0], [59.0, 45.5], [59.0, 47.0], [52.0, 47.0],
+                    [52.0, 18.6], [51.5, 17.0], [47.0, 17.0], [45.0, 17.0], [45.0, 14.4], [45.0, 11.0], [37.0, 11.0],
+                    [37.0, 14.4], [37.0, 17.0], [21.0, 17.0], [13.0, 17.5], [8.0, 19.8], [5.5, 20.0], [3.5, 20.0]], sprint=True)
+    print("   stage", score("stage"), "deaths", score("deaths"))
+    step("ride up with the light off")
+    time.sleep(2)
+    b.use_block(x=5, y=52, z=18)
+    time.sleep(52)
+    b.route(points=[[6.5, 20], [11.5, 19.8], [16, 19.5]])
+    time.sleep(12)
+    show_log()
+    print("   final stage", score("stage"), "ending", score("ending"), "time(s)", (score("time") or 0) // 20)
+
+
 
 # --- main ---
 

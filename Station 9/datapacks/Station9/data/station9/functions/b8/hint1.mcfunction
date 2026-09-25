@@ -1,0 +1,1 @@
+function station9:line/a1_hint1
