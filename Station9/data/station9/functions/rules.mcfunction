@@ -15,6 +15,13 @@ gamerule commandBlockOutput false
 gamerule spawnRadius 0
 gamerule doEntityDrops false
 gamerule sendCommandFeedback false
+gamerule showDeathMessages false
+gamerule naturalRegeneration true
+gamerule fallDamage false
+gamerule doTileDrops false
+gamerule maxCommandChainLength 1000000
+gamerule disableRaids true
+gamerule doVinesSpread false
 difficulty normal
-time set midnight
-weather clear
+time set 18000
+weather rain 1000000

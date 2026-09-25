@@ -51,6 +51,8 @@ def setup():
 
 
 def start(timeout=180):
+    if os.path.exists(LOG):
+        os.remove(LOG)
     out = open(os.path.join(SERVER, "console.txt"), "w")
     proc = subprocess.Popen(["java", "-Xmx3G", "-jar", "server.jar", "nogui"], cwd=SERVER,
                             stdin=subprocess.PIPE, stdout=out, stderr=subprocess.STDOUT)
@@ -76,10 +78,24 @@ def stop():
     time.sleep(6)
 
 
+def deploy():
+    """Copy the freshly generated datapack into the running world and reload it."""
+    dst = os.path.join(SERVER, "world", "datapacks", "Station9")
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    shutil.copytree(os.path.join(ROOT, "Station9"), dst)
+    from rcon import Rcon
+    print(Rcon().cmd("reload"))
+    time.sleep(3)
+    text = open(LOG, errors="replace").read()
+    bad = [l for l in text.splitlines()[-400:] if "Failed to load function" in l or "Couldn't load tag" in l]
+    print("\n".join(bad) if bad else "reloaded, no load errors")
+
+
 def errors():
     text = open(LOG, errors="replace").read()
     bad = [l for l in text.splitlines()
-           if re.search(r"Failed to load function|Couldn't load|Failed to parse|Unknown or incomplete|Exception", l)]
+           if re.search(r"/ERROR\]|Failed to load function|Couldn't load|Failed to parse|Unknown or incomplete|Exception", l)]
     return bad
 
 
@@ -92,6 +108,8 @@ if __name__ == "__main__":
         start()
     elif what == "stop":
         stop()
+    elif what == "deploy":
+        deploy()
     elif what == "errors":
         bad = errors()
         print("\n".join(bad) if bad else "no load errors")

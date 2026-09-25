@@ -62,7 +62,7 @@ line("a1_window", "ops", "Your heart rate just spiked. What did you see? ...Okay
      "Your heart rate just spiked. What did you see? ... Okay. Keep going.")
 line("a1_stairs", "ops", "Every level between you and B9 is dark on my board. Keep going down.",
      "Every level between you and bee nine is dark on my board. Keep going down.")
-line("phone", "phone", "Hey. It's Ray-ess. I'm down here with you. I'm in the kitchen, behind the door. ...Come and see.",
+line("phone", "phone", "Hey. It's Reyes. I'm down here with you. I'm in the kitchen, behind the door. ...Come and see.",
      "Hey. It's Ray-ess. I'm down here with you. I'm in the kitchen. Behind the door. ... Come and see.", speed=1.25)
 
 # --- Tapes ------------------------------------------------------------------------------

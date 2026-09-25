@@ -1,0 +1,3 @@
+tellraw @a ["", {"text": "[Radio] ", "color": "dark_aqua"}, {"text": "Reyes: ", "color": "dark_aqua"}, {"text": "Staff lockers. If it comes for you, get inside and shut the door. Don't make a sound.", "color": "gray", "italic": true}]
+execute as @a at @s run playsound station9:voice.a2_lockers voice @s ~ ~ ~ 1 1
+scoreboard players set #talk s9 109
