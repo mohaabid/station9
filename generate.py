@@ -67,6 +67,12 @@ def check():
         for m in sorted(missing):
             print("  missing function:", m)
         sys.exit("generation failed")
+    for name, lines in files.items():
+        for line in lines:
+            for sel in re.findall(r"@[aesp]\[([^\]]*)\]", line):
+                keys = {kv.split("=")[0] for kv in sel.split(",") if "=" in kv}
+                if keys & {"dx", "dy", "dz"} and not {"x", "z", "dx", "dz"} <= keys:
+                    missing.add((name, "partial volume selector " + sel))
     events = respack.sounds_json()
     for name, lines in files.items():
         for line in lines:

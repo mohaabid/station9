@@ -13,7 +13,7 @@ from . import world as W
 from .build import door, fill, lamp, setblock
 from .mc import (NS, actionbar, after, box_selector, call, fmt, fn, in_box, near, pos, sched, set_sign_lines, snd,
                  snd_me, timeline, txt)
-from .systems import (checkpoint, clear, drop, has, item_arg, lines, objective, say, say_len)
+from .systems import (checkpoint, clear, drop, has, item_arg, lines, objective, say, say_later, say_len)
 
 STORY_FLAGS = []
 
@@ -88,7 +88,7 @@ def effects():
     fn("fx/lightning", strikes)
     fn("fx/storm",
        "# lightning at random, while you're on the surface",
-       f"execute if entity @a[y=95,dy=100] run {call('fx/lightning')}",
+       f"execute if entity @a[x=-100,y=95,z=-100,dx=300,dy=100,dz=300] run {call('fx/lightning')}",
        "execute store result score #st s9 run random value 500..1500",
        "execute store result storage station9:fx d.t int 1 run scoreboard players get #st s9",
        "function station9:fx/storm_m with storage station9:fx d")
@@ -365,8 +365,8 @@ def act1():
        objective("Go down to B9", "Stairwell B, in the lobby"))
     STORY_FLAGS.append("#s_code")
 
-    fn("b8/hint1", "execute if score #talk s9 matches 1.. run return run scoreboard players remove #hint s9 100", say("a1_hint1"))
-    fn("b8/hint2", "execute if score #talk s9 matches 1.. run return run scoreboard players remove #hint s9 100", say("a1_hint2"))
+    fn("b8/hint1", say_later("a1_hint1", (4, 4)))
+    fn("b8/hint2", say_later("a1_hint2", (4, 4)))
 
     fn("b8/door_opens",
        door(W.DOORS["dormA"][0], "west", open_=True, wood="spruce", hinge="left"),
@@ -427,7 +427,7 @@ def act1():
        lamp("SP", False), bye("s9_window"),
        snd_me("sfx.sting_hit", .35),
        after(8, "b8/window_lamp", lamp("SP", True)),
-       after(60, "b8/window_line", say("a1_window", force=False)))
+       after(60, "b8/window_line", say_later("a1_window", (4, 4))))
     fn("b8/window_gone_quiet", "scoreboard players set #window s9 2", bye("s9_window"))
 
     ceiling = [(0, 10, 17), (18, 12, 17.6), (31, 14, 18), (52, 16, 17.5), (61, 17.5, 16.8), (88, 19, 16.4)]
@@ -442,7 +442,7 @@ def act1():
 
     fn("b8/stairs_lights",
        setblock((34, 51, 16), "minecraft:air"),
-       say("a1_stairs", force=False),
+       say_later("a1_stairs", (4, 5)),
        timeline("story/stairs_down", [
            (40, [lamp("ST3", False), snd("minecraft:block.iron_door.close", (12, 52, 22), 0.8, 0.5, "block")]),
            (120, [lamp("ST2", False)]),
@@ -476,7 +476,7 @@ def act2():
        f"{pressed(W.TAPE_HALE2)} run {call('tape/hale2')}",
        f"{pressed(W.TAPE_MARSH)} run {call('tape/marsh')}",
        f"execute if score #stage s9 matches 5..7 if entity @a[{box_selector((50, 41, 15), (60, 43, 25))}] run "
-       + once("s_nofuse", say("a2_nofuse", force=False)),
+       + once("s_nofuse", say_later("a2_nofuse", (5, 7))),
        "# the mirror: look into it, then turn around",
        f"execute if score #mirror s9 matches 0 if entity @a[{wash},y_rotation=140..180] run {call('b9/mirror_1')}",
        f"execute if score #mirror s9 matches 0 if entity @a[{wash},y_rotation=-180..-140] run {call('b9/mirror_1')}",
@@ -487,9 +487,9 @@ def act2():
        "# whispers, once each, when it is far away",
        "scoreboard players add #b9t s9 1",
        f"execute if score #b9t s9 matches 3000.. if score #talk s9 matches ..0 "
-       f"as @a at @s unless entity @e[tag=s9_hunter,distance=..18] run " + once("s_wh1", say("wh_hear", force=False)),
+       f"as @a at @s unless entity @e[tag=s9_hunter,distance=..18] run " + once("s_wh1", say_later("wh_hear", (5, 8))),
        f"execute if score #b9t s9 matches 8000.. if score #talk s9 matches ..0 if score #on s9 matches 1 "
-       f"as @a at @s unless entity @e[tag=s9_hunter,distance=..18] run " + once("s_wh2", say("wh_off", force=False)))
+       f"as @a at @s unless entity @e[tag=s9_hunter,distance=..18] run " + once("s_wh2", say_later("wh_off", (5, 8))))
     STORY_FLAGS.extend(["#mirror", "#cscene", "#b9t"])
 
     # the first sighting teaches the rule: it only moves when you can't see it
@@ -517,7 +517,7 @@ def act2():
        snd("sfx.step", (40, 41, 20), 1.4, 0.9),
        ai.place("gnw"), ai.mode(1, "wander"), "scoreboard players set #hgrace s9 400", call("ai/roam"),
        lines("story/rule", ["a2_gone", "a2_rule"], gap=30, start=40),
-       after(40 + say_len("a2_gone") + say_len("a2_rule") + 700, "story/lockers_line", say("a2_lockers", force=False)))
+       after(40 + say_len("a2_gone") + say_len("a2_rule") + 700, "story/lockers_line", say_later("a2_lockers", (5, 8))))
 
     fn("b9/got_key",
        "scoreboard players set #stage s9 6",
@@ -595,7 +595,7 @@ def act2():
     fn("b9/found_marsh",
        "scoreboard players set #marsh s9 1",
        lamp("A1", True),
-       say("a2_marsh", force=False))
+       say_later("a2_marsh", (5, 8)))
 
 
 # =========================================================================
@@ -643,7 +643,7 @@ def act3():
        ]))
     t0 = 20 + say_len("a3_power") + 20 + say_len("a3_wait") + 5
     fn("gen/lockdown2", say("a3_lockdown"))
-    after_pa = t0 + 30 + say_len("a3_lockdown")
+    after_pa = t0 + 30 + 70          # the banging starts while the PA is still talking
 
     def bang(v, n):
         return [snd("sfx.bang", (48, 42, 20), v, 1.0), shake(n)]
@@ -669,6 +669,7 @@ def act3():
        snd("minecraft:block.piston.contract", (58.5, 42, 26), 1.2, .5, "block"),
        checkpoint(W.CP_GEN),
        "scoreboard players set #tab s9 2",
+       "execute store result score #siren s9 run random value 380..560",
        say("a3_run"),
        title(" ", "RUN", times=(5, 30, 10), sub_color="dark_red"),
        objective("Get to the lift", "Tunnel south, service stairs up to B8"))
@@ -683,7 +684,7 @@ def act3():
        call("ai/to_player"))
 
     fn("chase/tick",
-       f"execute if entity @a[y=49,dy=6] run " + once("s_b8chase", say("a3_b8"), lamp("E8", True),
+       f"execute if entity @a[x=-100,y=49,z=-100,dx=300,dy=6,dz=300] run " + once("s_b8chase", say("a3_b8"), lamp("E8", True),
                                                       fill((6, 51, 19), (6, 53, 20), "minecraft:air")),
        f"execute if entity @a[{box_selector(*W.COLLAPSE_TRIGGER)}] run " + once("s_collapse", call("chase/collapse")),
        f"execute if entity @a[{box_selector((2, 51, 18), (4, 53, 21))}] run {call('end/1')}",
@@ -831,8 +832,8 @@ def ending():
 # =========================================================================
 def misc():
     fn("story/always", call("tape/tick"))
-    fn("story/heard_hint", "scoreboard players set #s_heard s9 1", say("a2_heard", force=False))
-    fn("story/caught_line", "scoreboard players set #s_caught s9 1", say("a2_caught", force=False))
+    fn("story/heard_hint", "scoreboard players set #s_heard s9 1", say_later("a2_heard", (5, 8)))
+    fn("story/caught_line", "scoreboard players set #s_caught s9 1", say_later("a2_caught", (5, 8)))
     STORY_FLAGS.extend(["#s_heard", "#s_caught"])
 
     kit = W.KIT_BARREL

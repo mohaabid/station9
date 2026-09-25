@@ -160,6 +160,17 @@ schedule clear station9:gen/sequence/01
 schedule clear station9:gen/sequence/02
 schedule clear station9:gen/sequence/03
 schedule clear station9:gen/sequence/04
+schedule clear station9:line/a1_hint1
+schedule clear station9:line/a1_hint2
+schedule clear station9:line/a1_stairs
+schedule clear station9:line/a1_window
+schedule clear station9:line/a2_caught
+schedule clear station9:line/a2_heard
+schedule clear station9:line/a2_lockers
+schedule clear station9:line/a2_marsh
+schedule clear station9:line/a2_nofuse
+schedule clear station9:line/wh_hear
+schedule clear station9:line/wh_off
 schedule clear station9:start
 schedule clear station9:story/arrive/00
 schedule clear station9:story/arrive/01

@@ -1,6 +1,6 @@
 execute as @a[tag=!s9_seen] run function station9:join
 execute if score #talk s9 matches 1.. run scoreboard players remove #talk s9 1
-execute if score #stage s9 matches 2..9 run scoreboard players add #time s9 1
+execute if score #stage s9 matches 2..10 run scoreboard players add #time s9 1
 execute if score #stage s9 matches 2.. as @a at @s run function station9:player/tick
 execute if score #stage s9 matches 2.. run function station9:amb/tick
 execute if score #stage s9 matches 2 run function station9:surface/tick

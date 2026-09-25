@@ -43,59 +43,100 @@ def rect(px, x, y, w, h, c, jitter=0):
 
 
 # --- Subject 9 --------------------------------------------------------------------------------
-SKIN = (214, 208, 198, 255)
-SKIN_D = (170, 162, 152, 255)
-SKIN_DD = (118, 110, 104, 255)
-VOID = (8, 6, 8, 255)
+SKIN = (196, 194, 180, 255)        # sickly grey with a green cast
+SKIN_D = (150, 150, 136, 255)
+SKIN_DD = (98, 98, 90, 255)
+BRUISE = (112, 104, 118, 255)
+VOID = (6, 5, 7, 255)
+GUM = (52, 18, 20, 255)
+
+
+def mottle(px, x, y, w, h, base, amount=10, blotch=None):
+    for yy in range(y, y + h):
+        for xx in range(x, x + w):
+            j = rng.randint(-amount, amount)
+            c = base
+            if blotch and rng.random() < 0.06:
+                c = blotch
+            px[yy][xx] = (max(0, min(255, c[0] + j)), max(0, min(255, c[1] + j)), max(0, min(255, c[2] + j)), 255)
 
 
 def subject9():
     px = canvas(64, 32)
-    # head (0,0) 8x8x8: top, bottom, sides, face, back
-    rect(px, 8, 0, 8, 8, SKIN_D, 10)       # top
-    rect(px, 16, 0, 8, 8, SKIN_DD, 8)      # bottom
-    rect(px, 0, 8, 8, 8, SKIN_D, 10)       # right side
-    rect(px, 8, 8, 8, 8, SKIN, 8)          # face
-    rect(px, 16, 8, 8, 8, SKIN_D, 10)      # left side
-    rect(px, 24, 8, 8, 8, SKIN_D, 10)      # back
-    # a long, empty face: two tall black eyes, a thin mouth that is too wide
-    for x, y in [(9, 10), (10, 10), (9, 11), (10, 11), (9, 12), (10, 12), (13, 10), (14, 10), (13, 11), (14, 11), (13, 12), (14, 12)]:
-        px[y][x] = VOID
-    px[13][10] = SKIN_DD
-    px[13][13] = SKIN_DD
-    for x in range(9, 15):
-        px[14][x] = (60, 30, 32, 255)
-    px[15][9] = SKIN_DD
-    px[15][14] = SKIN_DD
-    # veins on the scalp and temples
-    for x, y in [(10, 1), (11, 2), (11, 3), (12, 4), (2, 10), (3, 11), (3, 12), (18, 9), (19, 10), (26, 11), (27, 12)]:
-        px[y][x] = (140, 128, 150, 255)
-    # body (16,16) 8x12x4: ribs showing through
-    rect(px, 20, 16, 8, 4, SKIN_D, 8)
-    rect(px, 28, 16, 8, 4, SKIN_DD, 8)
-    rect(px, 16, 20, 4, 12, SKIN_D, 10)
-    rect(px, 20, 20, 8, 12, SKIN, 8)
-    rect(px, 28, 20, 4, 12, SKIN_D, 10)
-    rect(px, 32, 20, 8, 12, SKIN_D, 10)
-    for y in (22, 24, 26):
+    # head (0,0) 8x8x8
+    mottle(px, 8, 0, 8, 8, SKIN_D, 10, BRUISE)      # top
+    mottle(px, 16, 0, 8, 8, SKIN_DD, 8)             # under the chin
+    mottle(px, 0, 8, 8, 8, SKIN_D, 10, BRUISE)      # right side
+    mottle(px, 8, 8, 8, 8, SKIN, 8)                 # face
+    mottle(px, 16, 8, 8, 8, SKIN_D, 10, BRUISE)     # left side
+    mottle(px, 24, 8, 8, 8, SKIN_D, 10, BRUISE)     # back
+    f = lambda x, y, c: px[8 + y].__setitem__(8 + x, c)   # face-local painter (0..7)
+    # sunken cheeks and brow
+    for y in range(0, 8):
+        f(0, y, SKIN_D)
+        f(7, y, SKIN_D)
+    for x in range(1, 7):
+        f(x, 1, SKIN_D)
+    # eyes: deep, black, rimmed, and weeping
+    for x, y in [(1, 2), (2, 2), (5, 2), (6, 2), (1, 3), (2, 3), (5, 3), (6, 3)]:
+        f(x, y, VOID)
+    for x, y in [(1, 4), (6, 4), (2, 4), (5, 4)]:
+        f(x, y, SKIN_DD)
+    f(1, 5, SKIN_DD)
+    f(6, 5, SKIN_DD)
+    f(1, 6, SKIN_D)
+    f(6, 6, SKIN_D)
+    # a mouth that hangs open, too tall
+    for x, y in [(3, 4), (4, 4), (3, 5), (4, 5), (3, 6), (4, 6), (3, 7), (4, 7)]:
+        f(x, y, VOID)
+    f(3, 4, GUM)
+    f(4, 7, GUM)
+    f(2, 5, SKIN_DD)
+    f(5, 5, SKIN_DD)
+    f(2, 6, SKIN_DD)
+    f(5, 6, SKIN_DD)
+    # veins across the scalp and temples
+    for x, y in [(10, 1), (11, 2), (11, 3), (12, 4), (13, 4), (2, 10), (3, 11), (3, 12), (4, 13), (18, 9), (19, 10),
+                 (19, 11), (26, 11), (27, 12), (28, 12)]:
+        px[y][x] = (118, 110, 136, 255)
+    # body (16,16) 8x12x4: every rib, a caved-in stomach, no clothes
+    mottle(px, 20, 16, 8, 4, SKIN_D, 8)
+    mottle(px, 28, 16, 8, 4, SKIN_DD, 8)
+    mottle(px, 16, 20, 4, 12, SKIN_D, 10, BRUISE)
+    mottle(px, 20, 20, 8, 12, SKIN, 8, BRUISE)
+    mottle(px, 28, 20, 4, 12, SKIN_D, 10, BRUISE)
+    mottle(px, 32, 20, 8, 12, SKIN_D, 10, BRUISE)
+    for y in (21, 23, 25):
         for x in range(21, 27):
-            if x != 24:
+            if x not in (23, 24):
                 px[y][x] = SKIN_DD
-    for y in range(21, 31):
+    for y in range(20, 27):
+        px[y][23] = SKIN_D
         px[y][24] = SKIN_D
-    for y in range(29, 32):
-        for x in range(20, 28):
+    for y in range(27, 32):           # hollow belly, hip bones
+        for x in range(21, 27):
             px[y][x] = SKIN_D
-    for y in (23, 25, 27):
+    px[29][20] = SKIN_DD
+    px[29][27] = SKIN_DD
+    px[30][21] = SKIN_DD
+    px[30][26] = SKIN_DD
+    for y in (22, 24, 26):            # the spine and ribs from behind
         for x in range(33, 39):
             px[y][x] = SKIN_DD
-    # arms (40,16) and legs (0,16), 2x12x2: pale, ending in black fingers and feet
-    for ox in (40, 0):
-        rect(px, ox + 2, 16, 4, 2, SKIN_D, 6)
-        rect(px, ox, 18, 8, 12, SKIN, 10)
-        for x in range(ox, ox + 8, 2):
-            px[18 + rng.randint(2, 9)][x] = SKIN_D
-        rect(px, ox, 27 if ox == 40 else 28, 8, 3 if ox == 40 else 2, (30, 26, 28, 255), 6)
+    for y in range(20, 32):
+        px[y][36] = SKIN_DD
+    # arms (40,16) and legs (0,16): 2x12x2, long and thin, blackening at the ends
+    for ox, is_arm in ((40, True), (0, False)):
+        mottle(px, ox + 2, 16, 4, 2, SKIN_D, 6)
+        mottle(px, ox, 18, 8, 12, SKIN, 10, BRUISE)
+        start = 24 if is_arm else 27
+        for y in range(start, 30):
+            k = (y - start) / max(1, 29 - start)
+            c = tuple(int(SKIN_DD[i] * (1 - k) + VOID[i] * k) for i in range(3)) + (255,)
+            for x in range(ox, ox + 8):
+                px[y][x] = c
+        if is_arm:
+            mottle(px, ox + 4, 16, 2, 2, VOID, 4)    # fingertips, seen from below
     return png(64, 32, px)
 
 

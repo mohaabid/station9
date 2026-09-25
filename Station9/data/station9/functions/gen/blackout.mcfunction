@@ -11,6 +11,7 @@ fill 58 41 26 59 43 26 minecraft:air
 playsound minecraft:block.piston.contract block @a 58.5 42 26 1.2 0.5 0
 spawnpoint @a 58 41 24 0
 scoreboard players set #tab s9 2
+execute store result score #siren s9 run random value 380..560
 stopsound @a voice
 tellraw @a ["", {"text": "[Radio] ", "color": "dark_aqua"}, {"text": "Reyes: ", "color": "dark_aqua"}, {"text": "It's at the door! Maintenance tunnel, south side! Up the service stairs to B8, then the lift! Run!", "color": "gray", "italic": true}]
 execute as @a at @s run playsound station9:voice.a3_run voice @s ~ ~ ~ 1 1

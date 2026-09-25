@@ -16,7 +16,7 @@ import heapq
 import math
 
 from . import world as W
-from .mc import NS, call, fn, fmt, sched, snd
+from .mc import NS, call, door, fn, fmt, sched, snd
 
 NODE_IDS = {name: i for i, name in enumerate(W.NODES)}
 
@@ -156,7 +156,8 @@ def build():
        f"if score #hgrace s9 matches ..0 if score #hmode s9 matches 3..5 unless score #hmode s9 matches 4 run {call('ai/approach')}",
        "execute if score #hgrace s9 matches 1.. run scoreboard players remove #hgrace s9 1",
        call("ai/catchcheck"),
-       call("ai/presence"))
+       call("ai/presence"),
+       f"execute if score #e5 s9 matches 0 run {call('ai/doors')}")
 
     # --- senses ------------------------------------------------------------------------------
     fn("ai/sense",
@@ -367,6 +368,16 @@ def build():
     fn("ai/approach_m",
        "$execute as @e[tag=s9_hunter,limit=1] at @s facing entity @a[tag=!s9_hidden,limit=1,sort=nearest] feet "
        "run tp @s ^ ^ ^$(spd) ~ 0")
+
+    # it opens doors in its way rather than walking through them
+    doors = []
+    for name in ("office", "office_east", "records", "comms", "security"):
+        (x, y, z), facing, hinge, wood = W.DOORS[name]
+        doors.append(f"execute positioned {x + .5} {y} {z + .5} if entity @e[tag=s9_hunter,distance=..1.8] "
+                     f"if block {x} {y} {z} minecraft:{wood}_door[open=false] run {call('ai/door_' + name)}")
+        fn(f"ai/door_{name}", door((x, y, z), facing, open_=True, wood=wood, hinge=hinge),
+           snd("sfx.door_creak", (x + .5, y + 1, z + .5), 1.0, 1.3, "block"))
+    fn("ai/doors", doors)
 
     fn("ai/footstep",
        "scoreboard players set #hdist s9 0",

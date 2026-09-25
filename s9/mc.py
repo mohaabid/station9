@@ -124,10 +124,13 @@ def set_sign_lines(p, lines, color=None):
 
 
 def door(p, facing, open_=False, wood="dark_oak", hinge="left"):
+    """Place (or re-place) a door. An existing door's halves copy each other's state, so a
+    plain setblock can't open or close it: clear it first, then lower half, then upper."""
     x, y, z = p
     st = f"facing={facing},hinge={hinge},open={'true' if open_ else 'false'}"
     kind = wood if wood.endswith("door") else f"{wood}_door"
-    return [setblock((x, y, z), f"minecraft:{kind}[{st},half=lower]"),
+    return [setblock((x, y + 1, z), "minecraft:air"), setblock((x, y, z), "minecraft:air"),
+            setblock((x, y, z), f"minecraft:{kind}[{st},half=lower]"),
             setblock((x, y + 1, z), f"minecraft:{kind}[{st},half=upper]")]
 
 

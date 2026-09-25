@@ -1,3 +1,5 @@
+setblock 15 42 18 minecraft:air
+setblock 15 41 18 minecraft:air
 setblock 15 41 18 minecraft:dark_oak_door[facing=north,hinge=left,open=false,half=lower]
 setblock 15 42 18 minecraft:dark_oak_door[facing=north,hinge=left,open=false,half=upper]
 playsound minecraft:entity.zombie.attack_wooden_door hostile @a 15 42 18 1.2 0.8 0

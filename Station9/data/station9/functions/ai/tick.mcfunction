@@ -13,3 +13,4 @@ execute if score #frozen s9 matches 0 if score #hwait s9 matches 0 if score #hne
 execute if score #hgrace s9 matches 1.. run scoreboard players remove #hgrace s9 1
 function station9:ai/catchcheck
 function station9:ai/presence
+execute if score #e5 s9 matches 0 run function station9:ai/doors

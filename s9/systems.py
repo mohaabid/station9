@@ -87,6 +87,17 @@ def say(key, force=True):
     return out
 
 
+def say_later(key, stages):
+    """An incidental line: waits until nobody is talking, and is dropped if the moment has passed."""
+    lo, hi = stages
+    name = f"line/{key}"
+    fn(name,
+       f"execute unless score #stage s9 matches {lo}..{hi} run return 0",
+       f"execute if score #talk s9 matches 1.. run return run {sched(name, 20)}",
+       say(key, force=False))
+    return call(name)
+
+
 def say_len(key):
     return dur_ticks(f"voice/{key}")
 
@@ -155,7 +166,7 @@ def core(build_steps, start_story):
     fn("tick",
        f"execute as @a[tag=!s9_seen] run {call('join')}",
        "execute if score #talk s9 matches 1.. run scoreboard players remove #talk s9 1",
-       "execute if score #stage s9 matches 2..9 run scoreboard players add #time s9 1",
+       "execute if score #stage s9 matches 2..10 run scoreboard players add #time s9 1",
        f"execute if score #stage s9 matches 2.. as @a at @s run {call('player/tick')}",
        f"execute if score #stage s9 matches 2.. run {call('amb/tick')}",
        f"execute if score #stage s9 matches 2 run {call('surface/tick')}",
@@ -349,9 +360,9 @@ AREAS = {1: "amb.wind", 2: "amb.b8", 3: "amb.b9"}
 def ambience():
     beds = {1: dur_ticks("amb/wind"), 2: dur_ticks("amb/b8"), 3: dur_ticks("amb/b9")}
     lines_ = ["scoreboard players set #na s9 0",
-              "execute as @a[y=95,dy=100] run scoreboard players set #na s9 1",
-              "execute as @a[y=47,dy=10] run scoreboard players set #na s9 2",
-              "execute as @a[y=30,dy=16] run scoreboard players set #na s9 3",
+              "execute as @a[x=-100,y=95,z=-100,dx=300,dy=100,dz=300] run scoreboard players set #na s9 1",
+              "execute as @a[x=-100,y=47,z=-100,dx=300,dy=10,dz=300] run scoreboard players set #na s9 2",
+              "execute as @a[x=-100,y=30,z=-100,dx=300,dy=16,dz=300] run scoreboard players set #na s9 3",
               "execute if score #stage s9 matches 3 run scoreboard players set #na s9 0",
               "execute if score #stage s9 matches 9..10 run scoreboard players set #na s9 0",
               f"execute unless score #na s9 = #area s9 run {call('amb/switch')}",
