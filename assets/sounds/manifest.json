@@ -1,0 +1,557 @@
+{
+ "amb/b8": {
+  "dur": 58.0,
+  "stereo": true,
+  "kind": "ambient"
+ },
+ "amb/b9": {
+  "dur": 58.0,
+  "stereo": true,
+  "kind": "ambient"
+ },
+ "amb/lift_ride": {
+  "dur": 64.0,
+  "stereo": true,
+  "kind": "ambient"
+ },
+ "amb/wind": {
+  "dur": 58.0,
+  "stereo": true,
+  "kind": "ambient"
+ },
+ "sfx/bang_1": {
+  "dur": 3.64,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/bang_2": {
+  "dur": 3.64,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/bang_3": {
+  "dur": 3.64,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/beep_bad": {
+  "dur": 0.45,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/beep_key": {
+  "dur": 0.08,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/beep_ok": {
+  "dur": 0.35,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/breath_1": {
+  "dur": 3.16,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/breath_2": {
+  "dur": 3.46,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/breath_3": {
+  "dur": 3.76,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/collapse": {
+  "dur": 8.4,
+  "stereo": true,
+  "kind": "block"
+ },
+ "sfx/crash": {
+  "dur": 9.4,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/door_creak": {
+  "dur": 4.28,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/flash_buzz": {
+  "dur": 0.7,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/flash_off": {
+  "dur": 0.12,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/flash_on": {
+  "dur": 0.12,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/gate_close": {
+  "dur": 3.8,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/gate_open": {
+  "dur": 3.8,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/gen_hum": {
+  "dur": 18.0,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/gen_start": {
+  "dur": 9.8,
+  "stereo": true,
+  "kind": "block"
+ },
+ "sfx/heartbeat_1": {
+  "dur": 0.7,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/heartbeat_2": {
+  "dur": 0.7,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/held_breath_1": {
+  "dur": 2.6,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/held_breath_2": {
+  "dur": 2.6,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/knock": {
+  "dur": 3.96,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/lights_on": {
+  "dur": 5.66,
+  "stereo": true,
+  "kind": "block"
+ },
+ "sfx/locker_close": {
+  "dur": 1.38,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/locker_open": {
+  "dur": 1.38,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/phone_down": {
+  "dur": 0.9,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/phone_ring": {
+  "dur": 8.34,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/phone_up": {
+  "dur": 0.9,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/relay_boot": {
+  "dur": 2.6,
+  "stereo": false,
+  "kind": "block"
+ },
+ "sfx/roof_step_1": {
+  "dur": 2.28,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/roof_step_2": {
+  "dur": 2.28,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/roof_step_3": {
+  "dur": 2.28,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/roof_thump": {
+  "dur": 4.06,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/scrape": {
+  "dur": 5.04,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/scream": {
+  "dur": 4.12,
+  "stereo": true,
+  "kind": "hostile"
+ },
+ "sfx/silent": {
+  "dur": 0.05,
+  "stereo": false,
+  "kind": "master"
+ },
+ "sfx/siren": {
+  "dur": 12.5,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/sniff_1": {
+  "dur": 1.9,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/sniff_2": {
+  "dur": 1.9,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/static_1": {
+  "dur": 0.35,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/static_2": {
+  "dur": 0.5,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/static_3": {
+  "dur": 0.65,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/step_1": {
+  "dur": 1.15,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/step_2": {
+  "dur": 1.15,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/step_3": {
+  "dur": 1.15,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/step_4": {
+  "dur": 1.15,
+  "stereo": false,
+  "kind": "hostile"
+ },
+ "sfx/sting_dread": {
+  "dur": 9.6,
+  "stereo": true,
+  "kind": "master"
+ },
+ "sfx/sting_hit": {
+  "dur": 8.36,
+  "stereo": true,
+  "kind": "master"
+ },
+ "voice/a0_arrive": {
+  "dur": 6.725,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_called": {
+  "dur": 4.747,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_coffee": {
+  "dur": 6.219,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_gate": {
+  "dur": 7.431,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_hut": {
+  "dur": 4.593,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_in_cage": {
+  "dur": 3.404,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_kit": {
+  "dur": 7.816,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_ride1": {
+  "dur": 6.452,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_ride2": {
+  "dur": 6.717,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_ride3": {
+  "dur": 5.421,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_ride4": {
+  "dur": 3.687,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_signed": {
+  "dur": 4.745,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_to_lift": {
+  "dur": 4.294,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a0_walk": {
+  "dur": 7.075,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_code_ok": {
+  "dur": 3.918,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_contact": {
+  "dur": 7.167,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_contact2": {
+  "dur": 6.772,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_hint1": {
+  "dur": 6.887,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_hint2": {
+  "dur": 5.302,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_locked": {
+  "dur": 7.742,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_phone_after": {
+  "dur": 4.474,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_relay": {
+  "dur": 8.212,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_stairs": {
+  "dur": 4.765,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_static": {
+  "dur": 4.851,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a1_window": {
+  "dur": 5.358,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_after_fuse": {
+  "dur": 3.832,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_arrive": {
+  "dur": 7.756,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_caught": {
+  "dur": 3.805,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_contain": {
+  "dur": 6.746,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_deny": {
+  "dur": 5.541,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_fuse": {
+  "dur": 2.563,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_gone": {
+  "dur": 4.676,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_heard": {
+  "dur": 2.726,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_key": {
+  "dur": 3.083,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_lockers": {
+  "dur": 5.439,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_marsh": {
+  "dur": 4.151,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_nofuse": {
+  "dur": 6.344,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_rule": {
+  "dur": 5.973,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a2_watch": {
+  "dur": 2.076,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_b8": {
+  "dur": 3.009,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_collapse": {
+  "dur": 2.73,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_lift": {
+  "dur": 2.359,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_lockdown": {
+  "dur": 7.852,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_power": {
+  "dur": 3.317,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_run": {
+  "dur": 6.237,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/a3_wait": {
+  "dur": 5.424,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/e_dark": {
+  "dur": 6.207,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/e_heavy": {
+  "dur": 5.89,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/e_out": {
+  "dur": 5.187,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/e_ride": {
+  "dur": 5.655,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/phone": {
+  "dur": 10.005,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/tape_hale1": {
+  "dur": 15.984,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/tape_hale2": {
+  "dur": 14.101,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/tape_marsh": {
+  "dur": 14.017,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/wh_hear": {
+  "dur": 1.811,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/wh_off": {
+  "dur": 1.628,
+  "stereo": true,
+  "kind": "voice"
+ },
+ "voice/wh_stay": {
+  "dur": 1.98,
+  "stereo": true,
+  "kind": "voice"
+ }
+}
