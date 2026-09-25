@@ -8,6 +8,7 @@ execute as @a at @s run playsound station9:sfx.flash_buzz master @s ~ ~ ~ 0.8 1.
 execute as @a at @s anchored eyes run particle minecraft:electric_spark ^ ^-0.3 ^0.6 0.1 0.1 0.1 0.3 20 force @s
 effect give @a minecraft:darkness 3 0 true
 fill 58 41 26 59 43 26 minecraft:air
+fill 51 51 18 52 53 18 minecraft:air
 playsound minecraft:block.piston.contract block @a 58.5 42 26 1.2 0.5 0
 spawnpoint @a 58 41 24 0
 scoreboard players set #tab s9 2

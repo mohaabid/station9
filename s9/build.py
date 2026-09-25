@@ -466,7 +466,7 @@ def b8_details():
     # --- hall + service corridor -----------------------------------------------------------------------------
     d += ["# Hall",
           sign((22, 53, 17), "north", ["", "HALL B8", "", ""], color="white"),
-          sign((52, 53, 16), "south", ["SERVICE", "STAIRS", "v  B9", ""], color="white"),
+          sign((50, 52, 17), "north", ["SERVICE STAIRS", "LOCKED", "maintenance", "only"], color="red", glow=True),
           setblock((50, 53, 16), "minecraft:cobweb")]
     d += ["# Service corridor",
           fill((51, 53, 20), (51, 53, 45), "minecraft:polished_basalt[axis=z]"),

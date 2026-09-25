@@ -671,6 +671,7 @@ def act3():
        "execute as @a at @s anchored eyes run particle minecraft:electric_spark ^ ^-0.3 ^0.6 0.1 0.1 0.1 0.3 20 force @s",
        "effect give @a minecraft:darkness 3 0 true",
        fill(*W.B9_OPEN["gen_s"][0], "minecraft:air"),
+       fill(*W.B8_OPEN["servicec"][0], "minecraft:air"),
        snd("minecraft:block.piston.contract", (58.5, 42, 26), 1.2, .5, "block"),
        checkpoint(W.CP_GEN),
        "scoreboard players set #tab s9 2",

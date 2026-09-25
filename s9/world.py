@@ -148,7 +148,7 @@ B8_OPEN = {
     "window": (((23, 52, 26), (28, 53, 26)), "glass_pane[east=true,west=true]"),
     "comms": (((38, 51, 18), (38, 52, 18)), "air"),
     "security": (((47, 51, 18), (47, 52, 18)), "air"),
-    "servicec": (((51, 51, 18), (52, 53, 18)), "air"),
+    "servicec": (((51, 51, 18), (52, 53, 18)), "iron_block"),     # locked until the escape
 }
 
 # Wooden doors placed after the openings: (lower block, facing, hinge, wood)
@@ -321,7 +321,7 @@ EDGES = [
     ("c31", "kd", "contain_n"), ("kd", "ki"), ("ki", "kc"), ("ki", "kw"), ("ki", "ke"), ("kw", "kc"), ("ke", "kc"),
     ("gs", "gsd", "gen_s"), ("gsd", "t1n"), ("t1n", "t1s"), ("t1s", "t2e"), ("t2e", "t2d"),
     ("t1s", "ssb"), ("ssb", "sst"), ("sst", "se8"), ("se8", "sew"), ("sew", "sc40"), ("sc40", "sc30"), ("sc30", "sc20"),
-    ("sc20", "h51"),
+    ("sc20", "h51", "service8"),
     ("h51", "h47"), ("h47", "h45"), ("h45", "h41", "hall_mid"), ("h41", "h37", "hall_mid"), ("h37", "h31"), ("h31", "h27"),
     ("h27", "h25"), ("h25", "h21"), ("h21", "lbe"), ("lbe", "lbc"), ("lbc", "lbg"),
     ("h45", "cfd2"), ("cfd2", "cf2"), ("cf2", "cf1"), ("cf1", "cfd1"), ("cfd1", "h37"),
@@ -333,8 +333,8 @@ EDGES = [
 TABLES = {
     0: {"stairs8", "gen_n", "gen_w", "hall_mid"},                                   # B9, containment still locked
     1: {"stairs8", "gen_n", "gen_w", "hall_mid", "contain_n"},                      # containment open
-    2: {"stairs8", "gen_w", "contain_n", "gen_s", "hall_mid"},                      # the escape
-    3: {"stairs8", "gen_w", "contain_n", "gen_s"},                                  # the escape, hall collapsed
+    2: {"stairs8", "gen_w", "contain_n", "gen_s", "service8", "hall_mid"},          # the escape
+    3: {"stairs8", "gen_w", "contain_n", "gen_s", "service8"},                      # the escape, hall collapsed
 }
 
 # Where it wanders when it has nothing better to do (B9 only)

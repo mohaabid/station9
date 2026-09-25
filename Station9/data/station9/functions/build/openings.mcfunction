@@ -28,7 +28,7 @@ fill 30 51 26 30 52 26 minecraft:air
 fill 23 52 26 28 53 26 minecraft:glass_pane[east=true,west=true]
 fill 38 51 18 38 52 18 minecraft:air
 fill 47 51 18 47 52 18 minecraft:air
-fill 51 51 18 52 53 18 minecraft:air
+fill 51 51 18 52 53 18 minecraft:iron_block
 setblock 15 42 18 minecraft:air
 setblock 15 41 18 minecraft:air
 setblock 15 41 18 minecraft:dark_oak_door[facing=north,hinge=left,open=false,half=lower]
